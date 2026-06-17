@@ -165,5 +165,119 @@ desi_match: 'aarambh\n\nkaam din(n) -> string:\n    mila n:\n        1 -> wapas 
         this.value = '';
     });
 
+    // ==========================================
+    // GAMIFICATION (LEARNING LEVELS)
+    // ==========================================
+    var currentMission = null;
+    var MISSIONS = [
+        {
+            id: 1,
+            title: "Write your first code!",
+            desc: "Use <code>dikha(\"Namaste Duniya\")</code> to print the text.",
+            code: "aarambh\n\n-- Your code here\n\n\nkhatam",
+            expected: "Namaste Duniya\n"
+        },
+        {
+            id: 2,
+            title: "Variables",
+            desc: "Create a variable: <code>mahavir score = 100</code> and print it.",
+            code: "aarambh\n\n-- Create score and use dikha(badal(score))\n\n\nkhatam",
+            expected: "100\n"
+        },
+        {
+            id: 3,
+            title: "Math",
+            desc: "Print the result of <code>50 + 50</code>.",
+            code: "aarambh\n\ndikha(badal(  ))\n\nkhatam",
+            expected: "100\n"
+        },
+        {
+            id: 4,
+            title: "If / Else",
+            desc: "Write an <code>agar 10 > 5:</code> statement that prints 'Pass'.",
+            code: "aarambh\n\nagar 10 > 5:\n    -- print Pass here\nbas\n\nkhatam",
+            expected: "Pass\n"
+        },
+        {
+            id: 5,
+            title: "Loops",
+            desc: "Print 1 to 3 using <code>ghuma i se 1 tak 3:</code>",
+            code: "aarambh\n\nghuma i se 1 tak 3:\n    -- print i here\nbas\n\nkhatam",
+            expected: "1\n2\n3\n"
+        }
+    ];
+
+    var missionDesc = document.getElementById('mission-desc');
+    var missionBar = document.getElementById('mission-bar');
+    var lvlBtns = document.querySelectorAll('.lvl-btn');
+
+    lvlBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var lvlId = parseInt(this.getAttribute('data-level'));
+            loadMission(lvlId);
+        });
+    });
+
+    function loadMission(id) {
+        currentMission = MISSIONS.find(m => m.id === id);
+        if (!currentMission) return;
+        
+        // Update UI
+        lvlBtns.forEach(b => b.classList.remove('active'));
+        document.querySelector('.lvl-btn[data-level="'+id+'"]').classList.add('active');
+        
+        missionDesc.innerHTML = currentMission.desc;
+        editor.value = currentMission.code;
+        updateLines();
+        
+        outputBuffer = '';
+        output.innerHTML = '<span class="dim">-- Level ' + id + ' Loaded. Complete the mission!</span>';
+    }
+
+    // Wrap the original Run logic to check for mission success
+    var originalRunClick = btnRun.onclick; // Remove inline if any
+    
+    // We already added a listener for btnRun earlier, let's override the behavior
+    // by removing the old one or just adding a check in the same file.
+    // Actually, we can just replace the btnRun listener or patch it.
+    // To avoid duplication, I will just redefine the listener after cloning the button.
+    var newBtnRun = btnRun.cloneNode(true);
+    btnRun.parentNode.replaceChild(newBtnRun, btnRun);
+    btnRun = newBtnRun;
+    
+    btnRun.addEventListener('click', function() {
+        var code = editor.value;
+        if (!code.trim()) return;
+        outputBuffer = '';
+        output.innerHTML = '';
+        try {
+            Module.ccall('run_vel_code', null, ['string'], [code]);
+        } catch (e) {
+            outputBuffer += '[System Error] ' + e.message + '\n';
+            renderOutput();
+        }
+        
+        // Gamification Check
+        if (currentMission) {
+            // strip ansi/colors if any, just check raw outputBuffer
+            if (outputBuffer === currentMission.expected || outputBuffer === currentMission.expected.trim() + '\n') {
+                // SUCCESS!
+                var currentBtn = document.querySelector('.lvl-btn[data-level="'+currentMission.id+'"]');
+                currentBtn.classList.add('completed');
+                
+                missionDesc.innerHTML = "<strong>🎉 SUCCESS!</strong> Mission completed!";
+                missionBar.classList.add('mission-success');
+                setTimeout(() => missionBar.classList.remove('mission-success'), 1000);
+                
+                outputBuffer += '\n[MISSION ACCOMPLISHED] Great job!\n';
+                renderOutput();
+            }
+        }
+        
+        if (outputBuffer.trim() === '') {
+            output.innerHTML = '<span class="out-ok">✓ Script executed (no output)</span>';
+        }
+    });
+
     updateLines();
 });
