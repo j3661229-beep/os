@@ -7,6 +7,12 @@ var outputBuffer = '';
 var isReady = false;
 
 var Module = {
+    locateFile: function(path, prefix) {
+        if (path.endsWith('.wasm')) {
+            return prefix + path + '?v=' + Date.now();
+        }
+        return prefix + path;
+    },
     print: function(text) {
         outputBuffer += text + '\n';
         renderOutput();
