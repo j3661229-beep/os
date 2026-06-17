@@ -1,0 +1,27 @@
+aarambh
+
+mahavir naam = "Jayesh"
+dikha("Namaste, {naam}!")
+
+mahavir x = 10
+mahavir y = 32
+dikha("Jawab hai: " + badal(x + y))
+
+kaam jodo(a, b) -> number:
+    wapas a + b
+bas
+
+dikha(badal(jodo(100, 200)))
+
+ghuma i se 1 tak 5:
+    dikha("Ginti: " + badal(i))
+bas
+
+mahavir mood = sahi
+agar mood == sahi:
+    dikha("Aaj ka din accha hai!")
+warna:
+    dikha("Koi baat nahi")
+bas
+
+khatam

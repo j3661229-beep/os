@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vel Playground — Write and run Vel code in your browser. A custom language built from scratch, now with Desi Edition Hinglish keywords.">
+    <title>Vel Playground — Code in English or Hinglish 🇮🇳</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Animated BG -->
+    <div class="bg-noise"></div>
+    <div class="bg-glow g1"></div>
+    <div class="bg-glow g2"></div>
+    <div class="bg-glow g3"></div>
+
+    <!-- Nav -->
+    <nav id="nav">
+        <div class="nav-brand">
+            <span class="brand-icon">⚡</span>
+            <span class="brand-name">vel<span class="brand-dot">.</span></span>
+        </div>
+        <div class="nav-links">
+            <a href="#playground" class="nav-pill active">Playground</a>
+            <a href="#reference" class="nav-pill">Docs</a>
+            <a href="#desi" class="nav-pill desi-pill">🇮🇳 Desi</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header id="hero">
+        <div class="hero-badge">
+            <span class="badge-pulse"></span>
+            open source &bull; client-side wasm &bull; zero backend
+        </div>
+        <h1>Write code.<br><span class="gradient-text">Run it instantly.</span></h1>
+        <p class="hero-desc">A programming language built from scratch — bootloader to browser.<br>Now with <strong class="desi-highlight">Desi Edition</strong> Hinglish support 🇮🇳</p>
+        <div class="hero-cta">
+            <a href="#playground" class="cta-btn primary">
+                <span>▶</span> Start Coding
+            </a>
+            <a href="#desi" class="cta-btn secondary">
+                <span>🇮🇳</span> Try Desi Mode
+            </a>
+        </div>
+        <div class="hero-chips">
+            <div class="chip"><span class="chip-emoji">🔧</span> Built in C</div>
+            <div class="chip"><span class="chip-emoji">🌐</span> Runs in Browser</div>
+            <div class="chip"><span class="chip-emoji">🇮🇳</span> Hinglish Keywords</div>
+            <div class="chip"><span class="chip-emoji">⚡</span> Zero Dependencies</div>
+        </div>
+    </header>
+
+    <!-- Playground -->
+    <main id="playground">
+        <div class="section-label">
+            <span class="label-dot"></span>
+            PLAYGROUND
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <select id="examples-dropdown">
+                <option value="">📂 Choose example...</option>
+                <optgroup label="English">
+                    <option value="hello">👋 Hello World</option>
+                    <option value="fibonacci">🔢 Fibonacci Sequence</option>
+                    <option value="fizzbuzz">🧩 FizzBuzz Challenge</option>
+                    <option value="functions">⚡ Functions & Pipes</option>
+                    <option value="match">🎯 Pattern Matching</option>
+                </optgroup>
+                <optgroup label="🇮🇳 Desi Edition">
+                    <option value="desi_hello">🙏 Namaste Duniya</option>
+                    <option value="desi_func">⚡ Kaam (Functions)</option>
+                    <option value="desi_loop">🔁 Ghuma (Loops)</option>
+                    <option value="desi_match">🎯 Mila (Pattern Match)</option>
+                </optgroup>
+            </select>
+            <div class="toolbar-actions">
+                <button class="btn btn-run" id="btn-run" disabled>
+                    <span id="run-icon">▶</span>
+                    <span id="run-label">Loading...</span>
+                </button>
+                <button class="btn btn-secondary" id="btn-reset">↺ Reset</button>
+            </div>
+            <div class="status" id="status-indicator">
+                <span class="status-dot" id="status-dot"></span>
+                <span id="status-text">Loading Wasm...</span>
+            </div>
+        </div>
+
+        <!-- Panels -->
+        <div class="panels">
+            <section class="panel">
+                <div class="panel-bar">
+                    <div class="dots"><i></i><i></i><i></i></div>
+                    <span class="panel-name">📄 editor.vel</span>
+                    <span class="panel-hint">Ctrl+Enter to run</span>
+                </div>
+                <div class="editor-wrap">
+                    <div class="lines" id="line-numbers"></div>
+                    <textarea id="code-editor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off">aarambh
+
+-- Namaste Duniya!
+mahavir naam = "Duniya"
+dikha("Namaste, {naam}!")
+
+mahavir x = 10
+mahavir y = 32
+dikha("Jawab: " + badal(x + y))
+
+kaam jodo(a, b) -> number:
+    wapas a + b
+bas
+
+dikha("100 + 200 = " + badal(jodo(100, 200)))
+
+ghuma i se 1 tak 5:
+    dikha("Ginti: " + badal(i))
+bas
+
+khatam</textarea>
+                </div>
+            </section>
+            <section class="panel">
+                <div class="panel-bar">
+                    <div class="dots"><i></i><i></i><i></i></div>
+                    <span class="panel-name">💻 output</span>
+                    <button class="clear-btn" id="btn-clear" title="Clear">✕</button>
+                </div>
+                <div class="output-wrap" id="output-body">
+                    <div id="output" class="output-text"><span class="dim">-- Click ▶ Run ya Ctrl+Enter dabao!</span></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Desi Edition Showcase -->
+    <section id="desi">
+        <div class="section-label">
+            <span class="label-dot desi-dot"></span>
+            DESI EDITION 🇮🇳
+        </div>
+        <div class="desi-hero">
+            <h2>Code in <span class="gradient-text-warm">Hinglish</span></h2>
+            <p>Same powerful engine. Apni bhasha mein. Mix English & Hindi keywords freely!</p>
+        </div>
+
+        <div class="keyword-table-wrap">
+            <table class="keyword-table">
+                <thead>
+                    <tr><th>Desi 🇮🇳</th><th>English</th><th>Kya karta hai</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>mahavir</code></td><td><code>let</code></td><td>Variable banao</td></tr>
+                    <tr><td><code>rakho</code></td><td><code>const</code></td><td>Constant banao</td></tr>
+                    <tr><td><code>kaam</code></td><td><code>func</code></td><td>Function banao</td></tr>
+                    <tr><td><code>wapas</code></td><td><code>return</code></td><td>Value wapas do</td></tr>
+                    <tr><td><code>bas</code></td><td><code>end</code></td><td>Block khatam</td></tr>
+                    <tr><td><code>agar</code></td><td><code>if</code></td><td>Condition check</td></tr>
+                    <tr><td><code>warna</code></td><td><code>else</code></td><td>Nahi to ye karo</td></tr>
+                    <tr><td><code>ghuma</code></td><td><code>loop</code></td><td>Loop chalao</td></tr>
+                    <tr><td><code>jab_tak</code></td><td><code>while</code></td><td>Jab tak sahi hai</td></tr>
+                    <tr><td><code>dikha</code></td><td><code>show</code></td><td>Output dikhao</td></tr>
+                    <tr><td><code>mila</code></td><td><code>match</code></td><td>Pattern match karo</td></tr>
+                    <tr><td><code>sahi</code></td><td><code>true</code></td><td>Boolean true</td></tr>
+                    <tr><td><code>galat</code></td><td><code>false</code></td><td>Boolean false</td></tr>
+                    <tr><td><code>badal</code></td><td><code>to_string</code></td><td>String mein badlo</td></tr>
+                    <tr><td><code>aarambh</code></td><td><em>(start)</em></td><td>Program shuru</td></tr>
+                    <tr><td><code>khatam</code></td><td><em>(end)</em></td><td>Program khatam</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="desi-examples">
+            <div class="desi-card">
+                <div class="desi-card-head">
+                    <span>🙏</span> Hello World — Desi Style
+                </div>
+                <pre><code>aarambh
+
+mahavir naam = "Jayesh"
+dikha("Namaste, {naam}!")
+
+mahavir x = 10
+mahavir y = 32
+dikha("Jawab: " + badal(x + y))
+
+khatam</code></pre>
+            </div>
+            <div class="desi-card">
+                <div class="desi-card-head">
+                    <span>⚡</span> Functions — Kaam Style
+                </div>
+                <pre><code>aarambh
+
+kaam jodo(a, b) -> number:
+    wapas a + b
+bas
+
+kaam namaste(naam) -> string:
+    wapas "Namaste, " + naam + " ji!"
+bas
+
+dikha(badal(jodo(100, 200)))
+dikha(namaste("Duniya"))
+
+khatam</code></pre>
+            </div>
+            <div class="desi-card">
+                <div class="desi-card-head">
+                    <span>🔁</span> Loops & Conditions
+                </div>
+                <pre><code>aarambh
+
+ghuma i se 1 tak 5:
+    dikha("Ginti: " + badal(i))
+bas
+
+mahavir mood = sahi
+agar mood == sahi:
+    dikha("Accha hai!")
+warna:
+    dikha("Koi baat nahi")
+bas
+
+khatam</code></pre>
+            </div>
+            <div class="desi-card">
+                <div class="desi-card-head">
+                    <span>🎯</span> Pattern Matching
+                </div>
+                <pre><code>aarambh
+
+kaam din(n) -> string:
+    mila n:
+        1 -> wapas "Somvaar"
+        2 -> wapas "Mangalvaar"
+        3 -> wapas "Budhvaar"
+        _ -> wapas "Pata nahi"
+    bas
+    wapas ""
+bas
+
+ghuma i se 1 tak 4:
+    dikha(badal(i) + " = " + din(i))
+bas
+
+khatam</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- English Reference -->
+    <section id="reference">
+        <div class="section-label">
+            <span class="label-dot"></span>
+            LANGUAGE REFERENCE
+        </div>
+        <h2 class="ref-title">English Keywords</h2>
+        <div class="ref-grid">
+            <div class="ref-card">
+                <h3>📝 Variables</h3>
+                <pre><code>let name = "Vel"
+let age = 1
+const PI = 3.14</code></pre>
+            </div>
+            <div class="ref-card">
+                <h3>⚡ Functions</h3>
+                <pre><code>func add(a, b) -> number:
+    return a + b
+end
+
+show(to_string(add(2, 3)))</code></pre>
+            </div>
+            <div class="ref-card">
+                <h3>🔁 Loops</h3>
+                <pre><code>loop i from 1 to 5:
+    show(to_string(i))
+end</code></pre>
+            </div>
+            <div class="ref-card">
+                <h3>🔀 Conditionals</h3>
+                <pre><code>if x > 10:
+    show("Big")
+else:
+    show("Small")
+end</code></pre>
+            </div>
+            <div class="ref-card">
+                <h3>🎯 Match</h3>
+                <pre><code>match day:
+    1 -> show("Monday")
+    7 -> show("Sunday")
+    _ -> show("Other")
+end</code></pre>
+            </div>
+            <div class="ref-card">
+                <h3>🔗 Pipe</h3>
+                <pre><code>42 |> to_string() |> show()</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <span class="brand-icon">⚡</span> vel<span class="brand-dot">.</span>
+            </div>
+            <p>Built from scratch — bootloader to browser.</p>
+            <p class="footer-sub">&copy; 2025 VelOS &bull; Made with ❤️ in India</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="vel.js"></script>
+</body>
+</html>

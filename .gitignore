@@ -1,0 +1,23 @@
+# Compiled binaries
+*.exe
+vel
+velOS/vel
+
+# Disk images and systems
+*.img
+*.bin
+*.sys
+*.o
+
+# Build directories
+build/
+velOS/build/
+
+# IDE & OS files
+.vscode/
+.idea/
+.vs/
+*.suo
+*.user
+Thumbs.db
+.DS_Store

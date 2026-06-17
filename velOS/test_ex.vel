@@ -1,0 +1,4 @@
+show("Hello from Vel!")
+
+let name = "World"
+show("Hello, {name}!")

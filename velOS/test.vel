@@ -1,0 +1,16 @@
+show("Hello from Vel!")
+show("Running natively on Linux!")
+
+let x = 10
+let y = 32
+show("The answer is: " + to_string(x + y))
+
+func greet(name) -> string:
+    return "Hello, " + name + "!"
+end
+
+show(greet("World"))
+
+loop i from 1 to 5:
+    show("Count: " + to_string(i))
+end
