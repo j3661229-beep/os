@@ -138,13 +138,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Examples
     var EX = {
-hello: 'show("Hello from Vel!")\n\nlet name = "World"\nshow("Hello, {name}!")\n\nlet x = 10\nlet y = 32\nshow("The answer: " + to_string(x + y))',
+hello: 'show("Hello from Shunya!")\n\nlet name = "World"\nshow("Hello, {name}!")\n\nlet x = 10\nlet y = 32\nshow("The answer: " + to_string(x + y))',
 
 fibonacci: 'func fib(n) -> number:\n    if n == 0:\n        return 0\n    end\n    if n == 1:\n        return 1\n    end\n    return fib(n - 1) + fib(n - 2)\nend\n\nloop i from 0 to 10:\n    show("fib(" + to_string(i) + ") = " + to_string(fib(i)))\nend',
 
 fizzbuzz: 'loop i from 1 to 30:\n    let out = ""\n    if i - (i / 3) * 3 == 0:\n        let out = out + "Fizz"\n    end\n    if i - (i / 5) * 5 == 0:\n        let out = out + "Buzz"\n    end\n    if out == "":\n        show(to_string(i))\n    else:\n        show(out)\n    end\nend',
 
-functions: 'func add(a, b) -> number:\n    return a + b\nend\n\nfunc greet(name) -> string:\n    return "Hello, " + name + "!"\nend\n\nshow(to_string(add(10, 32)))\nshow(greet("VelOS"))\n\n-- Pipeline operator\n42 |> to_string() |> show()',
+functions: 'func add(a, b) -> number:\n    return a + b\nend\n\nfunc greet(name) -> string:\n    return "Hello, " + name + "!"\nend\n\nshow(to_string(add(10, 32)))\nshow(greet("ShunyaOS"))\n\n-- Pipeline operator\n42 |> to_string() |> show()',
 
 match: 'func day_name(n) -> string:\n    match n:\n        1 -> return "Monday"\n        2 -> return "Tuesday"\n        3 -> return "Wednesday"\n        4 -> return "Thursday"\n        5 -> return "Friday"\n        6 -> return "Saturday"\n        7 -> return "Sunday"\n        _ -> return "Unknown"\n    end\n    return ""\nend\n\nloop i from 1 to 7:\n    show(to_string(i) + " = " + day_name(i))\nend',
 
@@ -280,4 +280,40 @@ desi_match: 'aarambh\n\nkaam din(n) -> string:\n    mila n:\n        1 -> wapas 
     });
 
     updateLines();
+
+    // ==========================================
+    // TYPEWRITER ANIMATION
+    // ==========================================
+    const headlineText = "Write code.<br><span class=\"gradient-text\">Run it instantly.</span>";
+    const typeTarget = document.getElementById("typewriter-headline");
+    
+    if (typeTarget) {
+        let isTag = false;
+        let textToType = headlineText;
+        let index = 0;
+        let currentHTML = "";
+
+        typeTarget.innerHTML = "<span class=\"typewriter-cursor\"></span>";
+
+        function typeChar() {
+            if (index < textToType.length) {
+                let char = textToType.charAt(index);
+                if (char === '<') isTag = true;
+                
+                currentHTML += char;
+                index++;
+
+                if (isTag) {
+                    if (char === '>') isTag = false;
+                    typeChar(); // Type tag immediately
+                } else {
+                    typeTarget.innerHTML = currentHTML + "<span class=\"typewriter-cursor\"></span>";
+                    setTimeout(typeChar, 60 + Math.random() * 40);
+                }
+            } else {
+                typeTarget.innerHTML = currentHTML + "<span class=\"typewriter-cursor\"></span>";
+            }
+        }
+        setTimeout(typeChar, 500); // Start after short delay
+    }
 });

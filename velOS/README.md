@@ -1,6 +1,6 @@
-# VelOS & Vel Programming Language
+# ShunyaOS & Shunya Programming Language
 
-Welcome to the **Vel** project! This repository contains a custom-built programming language ("Vel") and a bare-metal operating system ("VelOS") designed specifically to run it.
+Welcome to the **Shunya** project! This repository contains a custom-built programming language ("Shunya") and a bare-metal operating system ("ShunyaOS") designed specifically to run it.
 
 We have successfully built a full-stack, from-scratch language ecosystem that runs across three entirely different environments:
 1. **Bare-Metal OS** (Bootable via GRUB, runs without an underlying OS)
@@ -11,12 +11,12 @@ We have successfully built a full-stack, from-scratch language ecosystem that ru
 
 ## 🌟 Project Milestones Completed
 
-### 1. The Vel Language Engine (C-based)
+### 1. The Shunya Language Engine (C-based)
 We built a custom interpreter from scratch in pure C, featuring:
 - **Lexer/Scanner**: Tokenizes source code, handles numbers, strings, booleans, and complex operators (like `|>` pipeline).
 - **Parser**: A recursive descent parser that builds an Abstract Syntax Tree (AST) handling precedence rules, blocks, and variable scopes.
 - **Interpreter**: Evaluates the AST at runtime, manages variable environments, and executes logic.
-- **Foreign Function Interface (FFI)**: A bridge that allows Vel scripts to call native C functions (e.g., printing to screen, delaying execution).
+- **Foreign Function Interface (FFI)**: A bridge that allows Shunya scripts to call native C functions (e.g., printing to screen, delaying execution).
 
 ### 2. The Desi / Fun Edition (Hinglish Support)
 The language features a fully localized "Desi Edition" that maps Hinglish keywords to internal tokens, making it fun and localized to write!
@@ -27,8 +27,8 @@ The language features a fully localized "Desi Edition" that maps Hinglish keywor
 - `dikha` (show), `badal` (to_string)
 - Syntactic sugar boundaries: `aarambh` (start) and `khatam` (end)
 
-### 3. Bare-Metal OS (VelOS)
-A custom 32-bit operating system that boots up and runs Vel scripts natively.
+### 3. Bare-Metal OS (ShunyaOS)
+A custom 32-bit operating system that boots up and runs Shunya scripts natively.
 - **Bootloader**: Multiboot-compliant assembly stub (`boot.asm`) that boots via GRUB.
 - **VGA Driver**: Custom text-mode driver for colored screen output.
 - **Keyboard Driver**: PS/2 keyboard driver via port I/O to read user input.
@@ -38,7 +38,7 @@ A custom 32-bit operating system that boots up and runs Vel scripts natively.
 ### 4. Standalone Host CLI (`make host`)
 We adapted the engine to compile natively on Linux/WSL using standard GCC.
 - Replaced bare-metal OS functions with standard C library equivalents (e.g., `printf`, `malloc`, `usleep`) using `#ifdef HOST_CLI`.
-- Reads `.vel` script files directly from the hard drive and executes them.
+- Reads `.shunya` script files directly from the hard drive and executes them.
 - Features `setjmp/longjmp` error recovery to catch parser errors gracefully without segfaulting.
 
 ### 5. WebAssembly Playground (`make web`)
