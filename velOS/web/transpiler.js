@@ -99,12 +99,22 @@ var ShunyaTranspiler = (function() {
         return 'void';
     }
 
-    // Replace show(...) calls
+    // Replace show(...) calls — handles nested parens
     function convertShow(expr, lang) {
-        // Extract the argument inside show(...)
-        var m = expr.match(/^show\((.+)\)$/);
-        if (!m) return expr;
-        var arg = m[1];
+        // Extract the argument inside show(...) by counting brackets
+        if (!expr.match(/^show\(/)) return null;
+        var inner = expr.slice(5); // remove "show("
+        // remove trailing ")"
+        var depth = 0;
+        var end = -1;
+        for (var i = 0; i < inner.length; i++) {
+            if (inner[i] === '(') depth++;
+            if (inner[i] === ')') {
+                if (depth === 0) { end = i; break; }
+                depth--;
+            }
+        }
+        var arg = end >= 0 ? inner.slice(0, end) : inner.replace(/\)$/, '');
 
         // Replace to_string(x) in the argument
         arg = convertToString(arg, lang);
@@ -410,8 +420,11 @@ var ShunyaTranspiler = (function() {
 
             // ---- Show ----
             if (norm.match(/^show\(/)) {
-                out.push(indent(depth) + convertShow(norm, lang));
-                continue;
+                var showResult = convertShow(norm, lang);
+                if (showResult) {
+                    out.push(indent(depth) + showResult);
+                    continue;
+                }
             }
 
             // ---- Pipeline operator ----
