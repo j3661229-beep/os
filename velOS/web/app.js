@@ -112,79 +112,56 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ==========================================
-    // TRANSPILER UI WIRING
+    // TRANSPILER — BIG GRID VERSION
     // ==========================================
-    var outputBody = document.getElementById('output-body');
-    var translateBody = document.getElementById('translate-body');
-    var translatedCode = document.getElementById('translated-code');
-    var btnCopy = document.getElementById('btn-copy');
-    var outTabs = document.querySelectorAll('.out-tab');
-    var langTabs = document.querySelectorAll('.lang-tab');
-    var currentLang = 'python';
+    var btnTranslate = document.getElementById('btn-translate');
+    var translateGrid = document.getElementById('translate-grid');
+    var codePython = document.getElementById('code-python');
+    var codeC = document.getElementById('code-c');
+    var codeCpp = document.getElementById('code-cpp');
+    var codeJava = document.getElementById('code-java');
 
-    // Output / Translate tab switching
-    outTabs.forEach(function(tab) {
-        tab.addEventListener('click', function() {
-            outTabs.forEach(function(t) { t.classList.remove('active'); });
-            tab.classList.add('active');
-
-            var target = tab.getAttribute('data-tab');
-            if (target === 'output') {
-                outputBody.style.display = '';
-                translateBody.style.display = 'none';
-            } else {
-                outputBody.style.display = 'none';
-                translateBody.style.display = 'flex';
-                // Auto-translate when switching to translate tab
-                doTranslate(currentLang);
-            }
-        });
-    });
-
-    // Language tab switching
-    langTabs.forEach(function(tab) {
-        tab.addEventListener('click', function() {
-            langTabs.forEach(function(t) { t.classList.remove('active'); });
-            tab.classList.add('active');
-            currentLang = tab.getAttribute('data-lang');
-            doTranslate(currentLang);
-        });
-    });
-
-    // Translate function
-    function doTranslate(lang) {
+    // Big Translate button
+    btnTranslate.addEventListener('click', function() {
         var code = editor.value;
-        if (!code.trim()) {
-            translatedCode.innerHTML = '<span class="dim">-- Write some Shunya code first!</span>';
-            return;
-        }
-        try {
-            var result = ShunyaTranspiler.transpile(code, lang);
-            translatedCode.textContent = result;
-        } catch (e) {
-            translatedCode.innerHTML = '<span class="out-err">Translation error: ' + e.message + '</span>';
-        }
-    }
+        if (!code.trim()) return;
 
-    // Copy button
-    btnCopy.addEventListener('click', function() {
-        var text = translatedCode.textContent;
-        if (!text || text.startsWith('--')) return;
-        navigator.clipboard.writeText(text).then(function() {
-            btnCopy.textContent = '✅ Copied!';
-            btnCopy.classList.add('copied');
-            setTimeout(function() {
-                btnCopy.textContent = '📋 Copy';
-                btnCopy.classList.remove('copied');
-            }, 2000);
-        });
+        // Show the grid with animation
+        translateGrid.style.display = 'grid';
+
+        // Translate to all 4 languages at once
+        try {
+            codePython.textContent = ShunyaTranspiler.transpile(code, 'python');
+            codeC.textContent = ShunyaTranspiler.transpile(code, 'c');
+            codeCpp.textContent = ShunyaTranspiler.transpile(code, 'cpp');
+            codeJava.textContent = ShunyaTranspiler.transpile(code, 'java');
+        } catch (e) {
+            codePython.innerHTML = '<span class="out-err">Error: ' + e.message + '</span>';
+        }
+
+        // Smooth scroll to the grid
+        translateGrid.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
-    // Auto-translate when editor changes (if translate tab is active)
-    editor.addEventListener('input', function() {
-        if (translateBody.style.display !== 'none') {
-            doTranslate(currentLang);
-        }
+    // Copy buttons for each card
+    document.querySelectorAll('.copy-btn[data-copy]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var lang = this.getAttribute('data-copy');
+            var codeEl = document.getElementById('code-' + lang);
+            if (!codeEl) return;
+            var text = codeEl.textContent;
+            if (!text || text.startsWith('Click')) return;
+
+            var self = this;
+            navigator.clipboard.writeText(text).then(function() {
+                self.textContent = '✅ Copied!';
+                self.classList.add('copied');
+                setTimeout(function() {
+                    self.textContent = '📋 Copy';
+                    self.classList.remove('copied');
+                }, 2000);
+            });
+        });
     });
 
     // Line numbers

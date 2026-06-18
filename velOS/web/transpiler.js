@@ -445,11 +445,59 @@ var ShunyaTranspiler = (function() {
                 continue;
             }
 
-            // ---- Fallback: pass through as comment ----
+            // ---- Generic function call: foo(args) ----
+            var funcCallMatch = norm.match(/^(\w+)\((.*)?\)$/);
+            if (funcCallMatch) {
+                var fnName = funcCallMatch[1];
+                var fnArgs = funcCallMatch[2] || '';
+                fnArgs = convertExpr(fnArgs, lang);
+                if (lang === 'python') {
+                    out.push(indent(depth) + fnName + '(' + fnArgs + ')');
+                } else {
+                    out.push(indent(depth) + fnName + '(' + fnArgs + ');');
+                }
+                continue;
+            }
+
+            // ---- Variable reassignment: x = expr ----
+            var assignMatch = norm.match(/^(\w+)\s*=\s*(.+)$/);
+            if (assignMatch) {
+                var aName = assignMatch[1];
+                var aVal = convertExpr(assignMatch[2], lang);
+                if (lang === 'python') {
+                    out.push(indent(depth) + aName + ' = ' + aVal);
+                } else {
+                    out.push(indent(depth) + aName + ' = ' + aVal + ';');
+                }
+                continue;
+            }
+
+            // ---- Any expression with function call inside: foo(bar(x)) ----
+            var exprCallMatch = norm.match(/\w+\s*\(/);
+            if (exprCallMatch) {
+                var converted = convertExpr(norm, lang);
+                if (lang === 'python') {
+                    // Replace show() with print()
+                    converted = converted.replace(/\bshow\(/g, 'print(');
+                    out.push(indent(depth) + converted);
+                } else if (lang === 'c') {
+                    converted = converted.replace(/\bshow\(/g, 'printf("%s\\n", ');
+                    out.push(indent(depth) + converted + ';');
+                } else if (lang === 'cpp') {
+                    converted = converted.replace(/\bshow\(([^)]*)\)/g, 'cout << $1 << endl');
+                    out.push(indent(depth) + converted + ';');
+                } else if (lang === 'java') {
+                    converted = converted.replace(/\bshow\(/g, 'System.out.println(');
+                    out.push(indent(depth) + converted + ';');
+                }
+                continue;
+            }
+
+            // ---- Absolute fallback: output as-is (not as comment!) ----
             if (lang === 'python') {
-                out.push(indent(depth) + '# ' + norm);
+                out.push(indent(depth) + norm);
             } else {
-                out.push(indent(depth) + '// ' + norm);
+                out.push(indent(depth) + norm + ';');
             }
         }
 
