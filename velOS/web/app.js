@@ -95,6 +95,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (outputBuffer.trim() === '') {
             output.innerHTML = '<span class="out-ok">✓ Script executed (no output)</span>';
         }
+        // 🎉 Fire confetti on successful run (no errors)
+        if (outputBuffer.indexOf('[ERR]') === -1 && outputBuffer.indexOf('[Parse Error]') === -1 && outputBuffer.indexOf('[System Error]') === -1) {
+            if (typeof window.fireConfetti === 'function') {
+                window.fireConfetti();
+            }
+        }
     });
 
     // Reset
