@@ -149,11 +149,30 @@ khatam</textarea>
             <section class="panel">
                 <div class="panel-bar">
                     <div class="dots"><i></i><i></i><i></i></div>
-                    <span class="panel-name">💻 output</span>
+                    <div class="output-tabs">
+                        <button class="out-tab active" data-tab="output">▶ Output</button>
+                        <button class="out-tab" data-tab="translate">🔄 Translate</button>
+                    </div>
                     <button class="clear-btn" id="btn-clear" title="Clear">✕</button>
                 </div>
+
+                <!-- Output View -->
                 <div class="output-wrap" id="output-body">
                     <div id="output" class="output-text"><span class="dim">-- Click ▶ Run ya Ctrl+Enter dabao!</span></div>
+                </div>
+
+                <!-- Translate View -->
+                <div class="translate-wrap" id="translate-body" style="display:none;">
+                    <div class="lang-tabs">
+                        <button class="lang-tab active" data-lang="python">🐍 Python</button>
+                        <button class="lang-tab" data-lang="c">⚙️ C</button>
+                        <button class="lang-tab" data-lang="cpp">⚡ C++</button>
+                        <button class="lang-tab" data-lang="java">☕ Java</button>
+                    </div>
+                    <div class="translated-code-wrap">
+                        <button class="copy-btn" id="btn-copy" title="Copy code">📋 Copy</button>
+                        <pre class="translated-code" id="translated-code"><span class="dim">-- Select a language and click Translate!</span></pre>
+                    </div>
                 </div>
             </section>
         </div>
@@ -337,7 +356,8 @@ end</code></pre>
         </div>
     </footer>
 
-    <script src="app.js?v=3"></script>
-    <script src="vel.js?v=3"></script>
+    <script src="transpiler.js?v=4"></script>
+    <script src="app.js?v=4"></script>
+    <script src="vel.js?v=4"></script>
 </body>
 </html>

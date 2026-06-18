@@ -111,6 +111,82 @@ document.addEventListener('DOMContentLoaded', function() {
         output.innerHTML = '<span class="dim">-- Output cleared</span>';
     });
 
+    // ==========================================
+    // TRANSPILER UI WIRING
+    // ==========================================
+    var outputBody = document.getElementById('output-body');
+    var translateBody = document.getElementById('translate-body');
+    var translatedCode = document.getElementById('translated-code');
+    var btnCopy = document.getElementById('btn-copy');
+    var outTabs = document.querySelectorAll('.out-tab');
+    var langTabs = document.querySelectorAll('.lang-tab');
+    var currentLang = 'python';
+
+    // Output / Translate tab switching
+    outTabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            outTabs.forEach(function(t) { t.classList.remove('active'); });
+            tab.classList.add('active');
+
+            var target = tab.getAttribute('data-tab');
+            if (target === 'output') {
+                outputBody.style.display = '';
+                translateBody.style.display = 'none';
+            } else {
+                outputBody.style.display = 'none';
+                translateBody.style.display = 'flex';
+                // Auto-translate when switching to translate tab
+                doTranslate(currentLang);
+            }
+        });
+    });
+
+    // Language tab switching
+    langTabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            langTabs.forEach(function(t) { t.classList.remove('active'); });
+            tab.classList.add('active');
+            currentLang = tab.getAttribute('data-lang');
+            doTranslate(currentLang);
+        });
+    });
+
+    // Translate function
+    function doTranslate(lang) {
+        var code = editor.value;
+        if (!code.trim()) {
+            translatedCode.innerHTML = '<span class="dim">-- Write some Shunya code first!</span>';
+            return;
+        }
+        try {
+            var result = ShunyaTranspiler.transpile(code, lang);
+            translatedCode.textContent = result;
+        } catch (e) {
+            translatedCode.innerHTML = '<span class="out-err">Translation error: ' + e.message + '</span>';
+        }
+    }
+
+    // Copy button
+    btnCopy.addEventListener('click', function() {
+        var text = translatedCode.textContent;
+        if (!text || text.startsWith('--')) return;
+        navigator.clipboard.writeText(text).then(function() {
+            btnCopy.textContent = '✅ Copied!';
+            btnCopy.classList.add('copied');
+            setTimeout(function() {
+                btnCopy.textContent = '📋 Copy';
+                btnCopy.classList.remove('copied');
+            }, 2000);
+        });
+    });
+
+    // Auto-translate when editor changes (if translate tab is active)
+    editor.addEventListener('input', function() {
+        if (translateBody.style.display !== 'none') {
+            doTranslate(currentLang);
+        }
+    });
+
     // Line numbers
     function updateLines() {
         var n = editor.value.split('\n').length;
